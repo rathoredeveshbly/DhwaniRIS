@@ -1,25 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Page1 from "./Page1";
+import Page2 from "./Page2";
+import "./App.css";
+import axios from "axios";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: [],
+      page: 1
+
+    };
+  }
+
+  componentDidMount() {
+    axios
+      .get("https://intense-tor-76305.herokuapp.com/merchants")
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          posts: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  handlePage = (val) =>{
+      this.setState({
+          page :val
+      })
+  }
+  render() {
+    return (
+      <div className="App">
+        {this.state.page === 1 ? (
+          <Page1 pageHandler={()=>this.handlePage(2)} posts={this.state.posts} page={this.state.page} />
+        ) : (
+          <Page2 pageHandler={()=>this.handlePage(1)} posts={this.state.posts} page={this.state.page} />
+        )}
+      </div>
+    );
+  }
 }
 
 export default App;
