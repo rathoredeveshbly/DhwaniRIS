@@ -15,6 +15,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    if(this.state.page !==2)
     axios
       .get("https://intense-tor-76305.herokuapp.com/merchants")
       .then((res) => {
